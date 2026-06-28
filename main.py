@@ -4,7 +4,6 @@ from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.list import OneLineListItem
 from kivy.animation import Animation
-from kivy.clock import Clock
 from kivy.core.window import Window
 
 Window.size = (360, 640)
@@ -31,14 +30,16 @@ ScreenManager:
         MDBoxLayout:
             size_hint_y: 0.35
             padding: "10dp"
-            Image:
-                id: labubu_img
-                source: "image_67379f.png"
-                size_hint: None, None
-                size: "150dp", "150dp"
-                pos_hint: {"center_x": 0.5}
-                allow_stretch: True
-                keep_ratio: True
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'center'
+                Image:
+                    id: labubu_img
+                    source: "image_67379f.png"
+                    size_hint: None, None
+                    size: "150dp", "150dp"
+                    allow_stretch: True
+                    keep_ratio: True
 
         MDBoxLayout:
             size_hint_y: 0.15
@@ -84,7 +85,6 @@ ScreenManager:
                 font_size: "24sp"
                 md_bg_color: 1, 0.1, 0.6, 1
                 on_release: app.append_to_display("/")
-
             MDFillRoundFlatButton:
                 text: "7"
                 size_hint: 1, 1
@@ -109,7 +109,6 @@ ScreenManager:
                 font_size: "24sp"
                 md_bg_color: 1, 0.1, 0.6, 1
                 on_release: app.append_to_display("*")
-
             MDFillRoundFlatButton:
                 text: "4"
                 size_hint: 1, 1
@@ -134,7 +133,6 @@ ScreenManager:
                 font_size: "24sp"
                 md_bg_color: 1, 0.1, 0.6, 1
                 on_release: app.append_to_display("-")
-
             MDFillRoundFlatButton:
                 text: "1"
                 size_hint: 1, 1
@@ -159,7 +157,6 @@ ScreenManager:
                 font_size: "24sp"
                 md_bg_color: 1, 0.1, 0.6, 1
                 on_release: app.append_to_display("+")
-
             MDFillRoundFlatButton:
                 text: "Hist"
                 size_hint: 1, 1
@@ -190,24 +187,19 @@ ScreenManager:
     MDBoxLayout:
         orientation: "vertical"
         md_bg_color: 0.05, 0.05, 0.1, 1
-        
         MDTopAppBar:
             title: "Historial Labubu"
             left_action_items: [["arrow-left", lambda x: app.switch_to_calc()]]
             right_action_items: [["trash-can", lambda x: app.clear_history()]]
             elevation: 2
             md_bg_color: 1, 0.1, 0.6, 1
-            
         ScrollView:
             MDList:
                 id: history_list
 '''
 
-class CalcScreen(MDScreen):
-    pass
-
-class HistoryScreen(MDScreen):
-    pass
+class CalcScreen(MDScreen): pass
+class HistoryScreen(MDScreen): pass
 
 class LabubuCalcApp(MDApp):
     def build(self):
@@ -219,47 +211,32 @@ class LabubuCalcApp(MDApp):
 
     def animar_labubu(self):
         img = self.root.get_screen("calc").ids.labubu_img
-        animacion = Animation(pos_hint={"center_y": 0.65}, duration=1.2, t='in_out_sine') + \
-                    Animation(pos_hint={"center_y": 0.55}, duration=1.2, t='in_out_sine')
+        animacion = Animation(pos_hint={"center_y": 0.6}, duration=1.2, t='in_out_sine') + \
+                    Animation(pos_hint={"center_y": 0.4}, duration=1.2, t='in_out_sine')
         animacion.repeat = True
         animacion.start(img)
 
     def append_to_display(self, text):
         display = self.root.get_screen("calc").ids.display
-        if display.text == "0" or display.text == "Error":
-            display.text = text
-        else:
-            display.text += text
+        if display.text == "0" or display.text == "Error": display.text = text
+        else: display.text += text
 
-    def clear_display(self):
-        self.root.get_screen("calc").ids.display.text = "0"
+    def clear_display(self): self.root.get_screen("calc").ids.display.text = "0"
 
     def calculate_result(self):
         display = self.root.get_screen("calc").ids.display
-        expression = display.text
         try:
-            result = str(eval(expression))
+            result = str(eval(display.text))
+            self.add_to_history(f"{display.text} = {result}")
             display.text = result
-            self.add_to_history(f"{expression} = {result}")
-        except Exception:
-            display.text = "Error"
+        except: display.text = "Error"
 
     def add_to_history(self, item_text):
-        history_list = self.root.get_screen("history").ids.history_list
-        item = OneLineListItem(text=f"[color=#00FFFF]{item_text}[/color]")
-        history_list.add_widget(item)
+        self.root.get_screen("history").ids.history_list.add_widget(OneLineListItem(text=item_text))
 
-    def clear_history(self):
-        history_list = self.root.get_screen("history").ids.history_list
-        history_list.clear_widgets()
-
-    def switch_to_history(self):
-        self.root.current = "history"
-        self.root.transition.direction = "left"
-
-    def switch_to_calc(self):
-        self.root.current = "calc"
-        self.root.transition.direction = "right"
+    def clear_history(self): self.root.get_screen("history").ids.history_list.clear_widgets()
+    def switch_to_history(self): self.root.current = "history"
+    def switch_to_calc(self): self.root.current = "calc"
 
 if __name__ == "__main__":
     LabubuCalcApp().run()
