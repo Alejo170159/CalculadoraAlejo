@@ -25,7 +25,7 @@ ScreenManager:
         md_bg_color: 1, 1, 1, 1
 
         MDTopAppBar:
-            title: "Kuromi Calculadora"
+            title: "Labubu Calculadora:3"
             left_action_items: [["calculator", lambda x: None]]
             right_action_items: [["history", lambda x: app.switch_to_history()]]
             elevation: 2
