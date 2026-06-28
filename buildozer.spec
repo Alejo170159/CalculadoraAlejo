@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (list) List of inclusions using pattern matching
-#source.include_patterns = assets/*,images/*.png
+source.include_patterns = main.py,calcu.png,image_67379f.png
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
@@ -412,41 +412,3 @@ warn_on_root = 1
 
 # (str) Path to build output (i.e. .apk, .aab, .ipa) storage
 # bin_dir = ./bin
-
-#   -----------------------------------------------------------------------------
-#   List as sections
-#
-#   You can define all the "list" as [section:key].
-#   Each line will be considered as a option to the list.
-#   Let's take [app] / source.exclude_patterns.
-#   Instead of doing:
-#
-#[app]
-#source.exclude_patterns = license,data/audio/*.wav,data/images/original/*
-#
-#   This can be translated into:
-#
-#[app:source.exclude_patterns]
-#license
-#data/audio/*.wav
-#data/images/original/*
-#
-
-
-#   -----------------------------------------------------------------------------
-#   Profiles
-#
-#   You can extend section / key with a profile
-#   For example, you want to deploy a demo version of your application without
-#   HD content. You could first change the title to add "(demo)" in the name
-#   and extend the excluded directories to remove the HD content.
-#
-#[app@demo]
-#title = My Application (demo)
-#
-#[app:source.exclude_patterns@demo]
-#images/hd/*
-#
-#   Then, invoke the command line with the "demo" profile:
-#
-#buildozer --profile demo android debug
